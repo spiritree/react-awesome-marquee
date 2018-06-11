@@ -8,7 +8,6 @@ module.exports = {
   mode: 'development',
   entry: [
     'webpack-hot-middleware/client?reload=true&path=/__webpack_hmr',
-    'babel-polyfill',
     './examples/index.js',
     './dll/vendor.dll.js'
   ],
@@ -26,7 +25,8 @@ module.exports = {
         use: ['happypack/loader'],
         include: [
           path.resolve(__dirname, 'examples'),
-          path.resolve(__dirname, 'src')
+          path.resolve(__dirname, 'src'),
+          path.resolve(__dirname, 'lib')
         ]
       },
       {

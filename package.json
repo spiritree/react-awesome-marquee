@@ -1,13 +1,13 @@
 {
   "name": "react-awesome-marquee",
   "version": "0.0.1",
-  "description": "marquee",
-  "main": "index.js",
+  "description": "react-marquee",
+  "main": "lib/index.js",
   "scripts": {
     "dll": "webpack -p --config webpack.dll.config.js --progress --profile --colors",
     "start": "node server.js",
-    "build": "webpack -p --config webpack.production.config.js --progress --profile --colors --display errors-only",
-    "dist": "set NODE_ENV=production&& node server.js",
+    "build": "webpack -p --config webpack.production.config.js --progress --profile --colors --display errors-only --hide-modules",
+    "build-page": "rm -r build && webpack -p --config webpack.page.config.js --progress --profile --colors --display errors-only",
     "cover": "./node_modules/.bin/istanbul cover _mocha",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
@@ -18,7 +18,6 @@
     "url": "git+https://github.com/spiritree/react-awesome-marquee.git"
   },
   "dependencies": {
-    "classnames": "^2.2.5",
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
     "react-dom": "^16.4.0"

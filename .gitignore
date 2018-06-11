@@ -70,3 +70,4 @@ dist/*
 !dist/.gitkeep
 
 package-lock.json
+.vscode

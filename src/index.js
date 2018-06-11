@@ -19,9 +19,9 @@ export default class Marquee extends React.Component {
     backgroundColor: PropTypes.string,
     color: PropTypes.string,
     fontSize: PropTypes.number,
-    // 切换时间
+    // 动画效果时间
     interval: PropTypes.number,
-    // 首次滚动时间
+    // 切换时间
     delay: PropTypes.number,
     // 文字列表
     marqueeList: PropTypes.array.isRequired
@@ -34,39 +34,78 @@ export default class Marquee extends React.Component {
     color: '#000',
     fontSize: 13,
     interval: 500,
-    delay: 2000,
+    delay: 1500,
     marqueeList: []
   }
 
   componentDidMount() {
-    this.run()
+    this.on(this.item, 'webkitTransitionEnd', this.transitionEnd)
+    this.on(this.item, 'transitionend', this.transitionEnd)
+    this.startAnimation()
   }
 
   componentWillUnmount() {
-    clearInterval(this.timer)
+    this.off(this.item, 'webkitTransitionEnd', this.transitionEnd)
+    this.off(this.item, 'transitionend', this.transitionEnd)
+    if (this._marqueeTimer) {
+      clearInterval(this._marqueeTimer)
+      this._marqueeTimer = null
+    }
   }
 
-  animate = (interval, height) => {
-    this.setState({
-      transform: `translate3D(0, ${height}px, 0)`,
-      transitionDuration: `${interval}ms`
-    })
+  on = (el, type, callback) => {
+    if (el.addEventListener) {
+      el.addEventListener(type, callback)
+    } else {
+      el.attachEvent(`on ${type}`, () => {
+        callback.call(el)
+      })
+    }
+  }
+
+  off = (el, type, callback) => {
+    if (el.removeEventListener) {
+      el.removeEventListener(type, callback)
+    } else {
+      el.detachEvent(`off ${type}`, callback)
+    }
+  }
+
+  transitionEnd = () => {
+    const { marqueeList } = this.props
+    let { marqueeIndex } = this.state
+    if (marqueeIndex === marqueeList.length ) {
+      this.animate(0, 0, 0)
+    }
+  }
+
+  animate = (index, interval, height) => {
+    let y = -(index * height)
+    this.item.style.transitionDuration = `${interval}ms`
+    this.item.style.transform = `translate3D(0, ${y}px, 0)`
+    this.setState({ marqueeIndex: index })
+  }
+
+  startAnimation = () => {
+    this.run()
+  }
+
+  stopAnimation = () => {
+    if (this._marqueeTimer) {
+      clearInterval(this._marqueeTimer)
+      this._marqueeTimer = null
+    }
   }
 
   run = () => {
-    let { marqueeIndex } = this.state
     const { delay, interval, height, marqueeList } = this.props
-    this.r = setInterval(() => {
-      this.animate(interval, -(marqueeIndex * height))
-      ++ marqueeIndex
-      this.setState({ marqueeIndex })
-        if (marqueeIndex >= marqueeList.length) {
-          setTimeout(() => {
-            marqueeIndex = 0
-            this.setState({ marqueeIndex: 0 })
-            this.animate(0, 0)
-          }, interval)
-        }
+    this._marqueeTimer = setInterval(() => {
+      let { marqueeIndex } = this.state
+      marqueeIndex += 1
+      if (marqueeIndex > marqueeList.length) {
+        marqueeIndex = 0
+      }
+      this.animate(marqueeIndex, interval, height)
     }, delay)
   }
 
@@ -82,9 +121,6 @@ export default class Marquee extends React.Component {
       height: `${height}px`
     }
     const animationStyles = {
-      position: 'absolute',
-      left: 0,
-      top: 0,
       transform: `${transform}`,
       transitionDuration: `${transitionDuration}`
     }
@@ -98,7 +134,7 @@ export default class Marquee extends React.Component {
 
     return (
       <div style={wrapStyles}>
-        <div style={animationStyles}>
+        <div style={animationStyles} ref={(el) => { this.item = el }}>
           {
             marqueeList.map((item, index) => {
               return (

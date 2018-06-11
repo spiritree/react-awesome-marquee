@@ -1,6 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
-import Marquee from '../../src'
+import Marquee from '../../src/index.js'
 
 const List = [
   'marquee test1',
@@ -13,17 +12,18 @@ const List = [
 export default class PageContainer extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
   }
 
   render() {
     return (
-      <Marquee 
+      <Marquee
         marqueeList={List}
         fontSize={40}
         color='#fff'
         backgroundColor='#f99'
         width={300}
+        interval={500}
+        delay={1000}
       />
     )
   }
