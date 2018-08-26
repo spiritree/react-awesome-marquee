@@ -17,72 +17,47 @@ export default class Marquee extends React.Component {
     width: PropTypes.number,
     height: PropTypes.number,
     backgroundColor: PropTypes.string,
-    color: PropTypes.string,
     fontSize: PropTypes.number,
-    // 动画效果时间
     interval: PropTypes.number,
-    // 切换时间
     delay: PropTypes.number,
-    // 文字列表
-    marqueeList: PropTypes.array.isRequired
+    // number of total elements
+    count: PropTypes.number,
   }
 
   static defaultProps = {
     width: 200,
     height: 50,
     backgroundColor: '#fffff',
-    color: '#000',
     fontSize: 13,
     interval: 500,
-    delay: 1500,
-    marqueeList: []
+    delay: 1500
   }
 
   componentDidMount() {
-    this.on(this.item, 'webkitTransitionEnd', this.transitionEnd)
-    this.on(this.item, 'transitionend', this.transitionEnd)
+    this.marqueeItem && this.marqueeItem.addEventListener('transitionend', this.transitionEnd)
     this.startAnimation()
   }
 
   componentWillUnmount() {
-    this.off(this.item, 'webkitTransitionEnd', this.transitionEnd)
-    this.off(this.item, 'transitionend', this.transitionEnd)
+    this.marqueeItem && this.marqueeItem.removeEventListener('transitionend', this.transitionEnd)
     if (this._marqueeTimer) {
       clearInterval(this._marqueeTimer)
       this._marqueeTimer = null
     }
   }
 
-  on = (el, type, callback) => {
-    if (el.addEventListener) {
-      el.addEventListener(type, callback)
-    } else {
-      el.attachEvent(`on ${type}`, () => {
-        callback.call(el)
-      })
-    }
-  }
-
-  off = (el, type, callback) => {
-    if (el.removeEventListener) {
-      el.removeEventListener(type, callback)
-    } else {
-      el.detachEvent(`off ${type}`, callback)
-    }
-  }
-
   transitionEnd = () => {
-    const { marqueeList } = this.props
+    const { count } = this.props
     let { marqueeIndex } = this.state
-    if (marqueeIndex === marqueeList.length ) {
+    if (marqueeIndex === count ) {
       this.animate(0, 0, 0)
     }
   }
 
   animate = (index, interval, height) => {
     let y = -(index * height)
-    this.item.style.transitionDuration = `${interval}ms`
-    this.item.style.transform = `translate3D(0, ${y}px, 0)`
+    this.marqueeItem.style.transitionDuration = `${interval}ms`
+    this.marqueeItem.style.transform = `translate3D(0, ${y}px, 0)`
     this.setState({ marqueeIndex: index })
   }
 
@@ -98,11 +73,11 @@ export default class Marquee extends React.Component {
   }
 
   run = () => {
-    const { delay, interval, height, marqueeList } = this.props
+    const { delay, interval, height, count } = this.props
     this._marqueeTimer = setInterval(() => {
       let { marqueeIndex } = this.state
       marqueeIndex += 1
-      if (marqueeIndex > marqueeList.length) {
+      if (marqueeIndex > count) {
         marqueeIndex = 0
       }
       this.animate(marqueeIndex, interval, height)
@@ -111,8 +86,8 @@ export default class Marquee extends React.Component {
 
   render() {
     const { transform, transitionDuration } = this.state
-    const { marqueeList, width, height, backgroundColor, color, fontSize } = this.props
-
+    const { width, height, backgroundColor } = this.props
+    
     const wrapStyles = {
       position: 'relative',
       overflow: 'hidden',
@@ -124,30 +99,15 @@ export default class Marquee extends React.Component {
       transform: `${transform}`,
       transitionDuration: `${transitionDuration}`
     }
-    const itemStyles = {
-      height: `${height}px`,
-      lineHeight: `${height}px`,
-      color: `${color}`,
-      fontSize: `${fontSize}px`,
-      overflow: 'hidden'
-    }
 
     return (
       <div style={wrapStyles}>
-        <div style={animationStyles} ref={(el) => { this.item = el }}>
+        <div style={animationStyles} ref={(el) => { this.marqueeItem = el }}>
           {
-            marqueeList.map((item, index) => {
-              return (
-                <div style={itemStyles} key={index}>
-                  {item}  
-                </div>
-              )
-            })
+            this.props.children
           }
           {
-            <div style={itemStyles}>
-              {marqueeList[0]}
-            </div>
+            this.props.children[0]
           }
         </div>
       </div>

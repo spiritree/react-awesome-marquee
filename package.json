@@ -1,7 +1,7 @@
 {
   "name": "react-awesome-marquee",
   "version": "0.0.1",
-  "description": "react-marquee",
+  "description": "Marquee component for React",
   "main": "lib/index.js",
   "scripts": {
     "dll": "webpack -p --config webpack.dll.config.js --progress --profile --colors",
@@ -17,6 +17,13 @@
     "type": "git",
     "url": "git+https://github.com/spiritree/react-awesome-marquee.git"
   },
+  "keywords": [
+    "react-awesome-marquee",
+    "react awesome marquee",
+    "awesome-marquee",
+    "react marquee",
+    "marquee"
+  ],
   "dependencies": {
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
@@ -41,7 +48,6 @@
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",
-    "csv-loader": "^2.1.1",
     "eslint": "^4.19.1",
     "eslint-loader": "^2.0.0",
     "eslint-config-airbnb-base": "^3.0.1",
@@ -54,7 +60,6 @@
     "file-loader": "^1.1.11",
     "happypack": "^5.0.0",
     "html-webpack-plugin": "^3.2.0",
-    "mockjs": "^1.0.1-beta3",
     "postcss-loader": "^2.1.5",
     "prettier": "1.12.1",
     "style-loader": "^0.21.0",
