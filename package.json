@@ -4,10 +4,10 @@
   "description": "Marquee component for React",
   "main": "lib/index.js",
   "scripts": {
-    "dll": "webpack -p --config webpack.dll.config.js --progress --profile --colors",
-    "start": "node server.js",
-    "build": "webpack -p --config webpack.production.config.js --progress --profile --colors --display errors-only --hide-modules",
-    "build-page": "rm -r build && webpack -p --config webpack.page.config.js --progress --profile --colors --display errors-only",
+    "dll": "webpack -p --config build/webpack.dll.config.js --progress --profile --colors",
+    "start": "node build/server.js",
+    "build": "webpack -p --config build/webpack.production.config.js --progress --profile --colors --display errors-only --hide-modules",
+    "build-page": "webpack -p --config build/webpack.page.config.js --progress --profile --colors --display errors-only",
     "cover": "./node_modules/.bin/istanbul cover _mocha",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
@@ -24,12 +24,10 @@
     "react marquee",
     "marquee"
   ],
-  "dependencies": {
+  "devDependencies": {
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
-    "react-dom": "^16.4.0"
-  },
-  "devDependencies": {
+    "react-dom": "^16.4.0",
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/plugin-proposal-decorators": "^7.0.0",
@@ -58,7 +56,6 @@
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "favicons-webpack-plugin": "^0.0.9",
     "file-loader": "^1.1.11",
-    "happypack": "^5.0.0",
     "html-webpack-plugin": "^3.2.0",
     "postcss-loader": "^2.1.5",
     "prettier": "1.12.1",
