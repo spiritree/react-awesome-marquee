@@ -17,14 +17,15 @@ const baseConfig = {
       path.resolve('src'),
       path.resolve('examples'),
       path.resolve('node_modules')
-    ]
+    ],
+    extensions: ['.ts', '.tsx', '.js', '.json']
   },
   module: {
     strictExportPresence: true,
     noParse: /\.min\.js/,
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js|ts)x?$/,
         loader: 'babel-loader',
         options: {
           cacheDirectory: true

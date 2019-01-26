@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Page from './page'
+import Page from './page/index.tsx'
 
 const rootDom = document.getElementById('app-root')
 

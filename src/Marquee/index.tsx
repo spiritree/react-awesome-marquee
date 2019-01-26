@@ -1,30 +1,34 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
 
-export default class Marquee extends React.Component {
-  constructor(props) {
+export interface MarqueeProps {
+  width: number
+  height: number
+  backgroundColor: string
+  fontSize: number
+  interval: number
+  delay: number
+  count: number
+}
+export interface MarqueeState {
+  marqueeIndex: number
+  transform: string
+  transitionDuration: string
+}
+
+export default class Marquee extends React.Component<
+  MarqueeProps,
+  MarqueeState
+> {
+  constructor(props: MarqueeProps) {
     super(props)
     this.state = {
       marqueeIndex: 0,
-      animation: {
-        transform: '',
-        transitionDuration: ''
-      }
+      transform: '',
+      transitionDuration: ''
     }
   }
 
-  static PropTypes = {
-    width: PropTypes.number,
-    height: PropTypes.number,
-    backgroundColor: PropTypes.string,
-    fontSize: PropTypes.number,
-    interval: PropTypes.number,
-    delay: PropTypes.number,
-    // number of total elements
-    count: PropTypes.number,
-  }
-
-  static defaultProps = {
+  public static defaultProps = {
     width: 200,
     height: 50,
     backgroundColor: '#fffff',
@@ -34,12 +38,14 @@ export default class Marquee extends React.Component {
   }
 
   componentDidMount() {
-    this.marqueeItem && this.marqueeItem.addEventListener('transitionend', this.transitionEnd)
+    this.marqueeItem &&
+      this.marqueeItem.addEventListener('transitionend', this.transitionEnd)
     this.startAnimation()
   }
 
   componentWillUnmount() {
-    this.marqueeItem && this.marqueeItem.removeEventListener('transitionend', this.transitionEnd)
+    this.marqueeItem &&
+      this.marqueeItem.removeEventListener('transitionend', this.transitionEnd)
     if (this._marqueeTimer) {
       clearInterval(this._marqueeTimer)
       this._marqueeTimer = null
@@ -49,12 +55,12 @@ export default class Marquee extends React.Component {
   transitionEnd = () => {
     const { count } = this.props
     let { marqueeIndex } = this.state
-    if (marqueeIndex === count ) {
+    if (marqueeIndex === count) {
       this.animate(0, 0, 0)
     }
   }
 
-  animate = (index, interval, height) => {
+  animate = (index: number, interval: number, height: number) => {
     let y = -(index * height)
     this.marqueeItem.style.transitionDuration = `${interval}ms`
     this.marqueeItem.style.transform = `translate3D(0, ${y}px, 0)`
@@ -86,9 +92,9 @@ export default class Marquee extends React.Component {
 
   render() {
     const { transform, transitionDuration } = this.state
-    const { width, height, backgroundColor } = this.props
-    
-    const wrapStyles = {
+    const { width, height, backgroundColor, children } = this.props
+
+    const wrapStyles: React.CSSProperties = {
       position: 'relative',
       overflow: 'hidden',
       backgroundColor: `${backgroundColor}`,
@@ -102,13 +108,14 @@ export default class Marquee extends React.Component {
 
     return (
       <div style={wrapStyles}>
-        <div style={animationStyles} ref={(el) => { this.marqueeItem = el }}>
-          {
-            this.props.children
-          }
-          {
-            this.props.children[0]
-          }
+        <div
+          style={animationStyles}
+          ref={el => {
+            this.marqueeItem = el
+          }}
+        >
+          {children}
+          {children[0]}
         </div>
       </div>
     )

@@ -14,7 +14,7 @@ module.exports = merge(baseConfig, {
   mode: 'development',
   entry: [
     'webpack-hot-middleware/client?reload=true&path=/__webpack_hmr',
-    path.resolve('examples/index.js'),
+    path.resolve('examples/App.tsx'),
     path.resolve(`dist/lib/${vendorFileName}.js`)
   ],
   output: {
