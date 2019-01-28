@@ -7,7 +7,7 @@ const BUILD_OUTPUT_DIR = path.resolve('lib')
 
 module.exports = merge(baseConfig, {
   mode: 'production',
-  entry: [path.resolve('src/index.js')],
+  entry: [path.resolve('src/Marquee/index.tsx')],
   resolve: {
     modules: [path.resolve('src')]
   },
