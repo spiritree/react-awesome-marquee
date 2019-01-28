@@ -1,0 +1,2 @@
+build/*.js linguist-language=TypeScript
+dist/lib/*.js linguist-language=TypeScript
