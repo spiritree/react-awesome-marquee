@@ -8,7 +8,9 @@ export interface MarqueeProps {
   interval: number
   delay: number
   count: number
+  children: JSX.Element[] | JSX.Element | any
 }
+
 export interface MarqueeState {
   marqueeIndex: number
   transform: string
@@ -19,6 +21,9 @@ export default class Marquee extends React.Component<
   MarqueeProps,
   MarqueeState
 > {
+  private marqueeItem: any
+  private _marqueeTimer: any
+
   constructor(props: MarqueeProps) {
     super(props)
     this.state = {
@@ -38,14 +43,12 @@ export default class Marquee extends React.Component<
   }
 
   componentDidMount() {
-    this.marqueeItem &&
-      this.marqueeItem.addEventListener('transitionend', this.transitionEnd)
+    this.marqueeItem.addEventListener('transitionend', this.transitionEnd)
     this.startAnimation()
   }
 
   componentWillUnmount() {
-    this.marqueeItem &&
-      this.marqueeItem.removeEventListener('transitionend', this.transitionEnd)
+    this.marqueeItem.removeEventListener('transitionend', this.transitionEnd)
     if (this._marqueeTimer) {
       clearInterval(this._marqueeTimer)
       this._marqueeTimer = null
@@ -54,14 +57,14 @@ export default class Marquee extends React.Component<
 
   transitionEnd = () => {
     const { count } = this.props
-    let { marqueeIndex } = this.state
+    const { marqueeIndex } = this.state
     if (marqueeIndex === count) {
       this.animate(0, 0, 0)
     }
   }
 
   animate = (index: number, interval: number, height: number) => {
-    let y = -(index * height)
+    const y = -(index * height)
     this.marqueeItem.style.transitionDuration = `${interval}ms`
     this.marqueeItem.style.transform = `translate3D(0, ${y}px, 0)`
     this.setState({ marqueeIndex: index })
